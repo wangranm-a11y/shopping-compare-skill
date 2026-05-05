@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>shopping-compare 工作流架构</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+  }
+  body {
+    font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif;
+    background: linear-gradient(135deg, #fafaf7 0%, #f0ede5 100%);
+    padding: 60px 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  .container {
+    width: 100%;
+    max-width: 1600px;
+    aspect-ratio: 16 / 9;
+    background: #fff;
+    border-radius: 24px;
+    padding: 60px 70px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  h1 {
+    font-size: 38px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+  .subtitle {
+    color: #888;
+    font-size: 17px;
+  }
+  .main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 3.5fr;
+    gap: 48px;
+    align-items: stretch;
+  }
+  .step0 {
+    background: linear-gradient(135deg, #fff5e6 0%, #ffe9c8 100%);
+    border: 2px solid #ff9500;
+    border-radius: 18px;
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(255, 149, 0, 0.12);
+  }
+  .step0-label {
+    color: #ff9500;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+  }
+  .step0-title {
+    font-weight: 700;
+    font-size: 26px;
+    color: #1a1a1a;
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+  .step0-desc {
+    color: #555;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .step0-quote {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px dashed #ff9500;
+    color: #ff7700;
+    font-size: 13px;
+    font-style: italic;
+    text-align: center;
+  }
+  .arrow {
+    align-self: center;
+    color: #ccc;
+    font-size: 32px;
+    text-align: center;
+    margin: 0 -24px;
+  }
+  .branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+  }
+  .branch {
+    background: #fff;
+    border: 1.5px solid #eee;
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s;
+  }
+  .branch.green { border-top: 4px solid #00c853; }
+  .branch.yellow { border-top: 4px solid #ff9800; }
+  .branch.gray { border-top: 4px solid #9e9e9e; }
+  .branch-tag {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    align-self: flex-start;
+  }
+  .green .branch-tag { background: #e6f7ed; color: #00875a; }
+  .yellow .branch-tag { background: #fff4e0; color: #b85d00; }
+  .gray .branch-tag { background: #f0f0f0; color: #555; }
+  .branch-title {
+    font-weight: 700;
+    font-size: 19px;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+  }
+  .branch-status {
+    font-size: 13px;
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .green .branch-status { color: #00875a; }
+  .yellow .branch-status { color: #b85d00; }
+  .gray .branch-status { color: #666; }
+  .branch-examples {
+    color: #555;
+    font-size: 13px;
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+  .branch-detail {
+    background: #fafafa;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-top: auto;
+    font-size: 12.5px;
+    color: #444;
+    line-height: 1.7;
+  }
+  .branch-detail .row strong {
+    color: #1a1a1a;
+  }
+  .branch-detail .meta {
+    color: #888;
+    font-size: 11.5px;
+    margin-top: 6px;
+    font-style: italic;
+  }
+  footer {
+    text-align: center;
+    color: #999;
+    font-size: 13px;
+    margin-top: 36px;
+    padding-top: 20px;
+    border-top: 1px solid #f0f0f0;
+  }
+  footer strong { color: #555; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>🛒 shopping-compare 工作流架构</h1>
+    <div class="subtitle">购物决策智能分流 · 不同品类走不同路径</div>
+  </header>
+
+  <div class="main">
+
+    <div class="step0">
+      <div class="step0-label">STEP 0</div>
+      <div class="step0-title">灵魂拷问<br>这个真该买吗？</div>
+      <div class="step0-desc">
+        保健品 · 高单价<br>
+        用户犹豫时触发
+      </div>
+      <div class="step0-quote">
+        有时候最好的推荐是「不买」
+      </div>
+    </div>
+
+    <div class="branches">
+
+      <div class="branch green">
+        <span class="branch-tag">✅ 完整自动化</span>
+        <div class="branch-title">性能 / 安全敏感</div>
+        <div class="branch-status">10–15 分钟搞定</div>
+        <div class="branch-examples">
+          保健品 · 电器 · 母婴<br>
+          3C 数码 · 化妆品 · 食品
+        </div>
+        <div class="branch-detail">
+          <div class="row"><strong>Stage 1</strong> · 选品牌</div>
+          <div class="row"><strong>Stage 2</strong> · 选店铺</div>
+          <div class="meta">京东主搜 + 中英背调 + 安全核查</div>
+        </div>
+      </div>
+
+      <div class="branch yellow">
+        <span class="branch-tag">⚠️ 半自动</span>
+        <div class="branch-title">风格 / 颜值优先</div>
+        <div class="branch-status">完成度约 60%</div>
+        <div class="branch-examples">
+          衣服 · 帽子 · 鞋<br>
+          包 · 配饰 · 家居装饰
+        </div>
+        <div class="branch-detail">
+          <div class="row">拼多多 / 淘宝 / 小红书</div>
+          <div class="row">域名被 Chrome 拦截</div>
+          <div class="meta">需用户截图协助分析</div>
+        </div>
+      </div>
+
+      <div class="branch gray">
+        <span class="branch-tag">❌ 不用 skill</span>
+        <div class="branch-title">极小额日用品</div>
+        <div class="branch-status">直接搜爆款下单</div>
+        <div class="branch-examples">
+          纸巾 · 袜子 · 笔<br>
+          便签 · 一次性日用品
+        </div>
+        <div class="branch-detail">
+          <div class="row">单价 &lt; 50 元</div>
+          <div class="row">品牌差异小 · 风险低</div>
+          <div class="meta">不值得调用调研流程</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    设计原则 · <strong>安全 &gt; 性价比 &gt; 便利</strong> · 不替用户拍板 · 证据链可见
+  </footer>
+</div>
+</body>
+</html>
