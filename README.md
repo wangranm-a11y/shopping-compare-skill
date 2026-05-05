@@ -106,6 +106,8 @@ MIT — see [LICENSE](LICENSE)
 
 ## 中文
 
+![工作流架构](docs/workflow-architecture.png)
+
 ### 这是什么
 
 一个 [Claude Code Skill](https://docs.anthropic.com/zh-CN/docs/claude-code/skills)，专门治国内网购选择困难症。它会自动跨平台（淘宝/京东/拼多多/小红书）对比商品、汇总评价、做安全核查、识破营销话术——把购物里 80% 的脏活做完，让你只需要做最后 20%「我到底喜不喜欢」的判断。
