@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Memory files (personal preferences, don't commit)
+memory/
+*.memory.md
+
+# Sensitive
+.env
+*.key
+secrets/
+
+# Build artifacts (if any)
+node_modules/
+dist/
+build/
